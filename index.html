@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBCS Mastery Lab — Part 1 of 2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --blue:#1565C0;--blue-l:#E3F2FD;--blue-m:#42A5F5;
+  --green:#2E7D32;--green-l:#E8F5E9;--green-m:#66BB6A;
+  --yellow:#F57F17;--yellow-l:#FFFDE7;--yellow-m:#FDD835;
+  --red:#B71C1C;--red-l:#FFEBEE;--red-m:#EF5350;
+  --orange:#E65100;--orange-l:#FFF3E0;
+  --purple:#4A148C;--purple-l:#F3E5F5;--purple-m:#AB47BC;
+  --teal:#00695C;--teal-l:#E0F2F1;
+  --gray-50:#FAFAFA;--gray-100:#F5F5F5;--gray-200:#EEEEEE;
+  --gray-300:#E0E0E0;--gray-500:#9E9E9E;--gray-600:#757575;
+  --gray-700:#616161;--gray-800:#424242;--gray-900:#212121;
+  --white:#fff;
+  --shadow:0 2px 8px rgba(0,0,0,.10);
+  --shadow-md:0 4px 20px rgba(0,0,0,.13);
+  --shadow-lg:0 8px 40px rgba(0,0,0,.16);
+  --r:12px;--r-sm:8px;--r-lg:20px;
+  --font:'DM Sans',sans-serif;--font-serif:'DM Serif Display',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:#F0F4F8;color:var(--gray-900);min-height:100vh;font-size:15px;}
+
+/* ─── TOP BAR ─── */
+.topbar{background:linear-gradient(135deg,#0D47A1 0%,#1565C0 40%,#4A148C 100%);color:#fff;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-lg);}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:12px 18px 0;}
+.topbar-title{font-family:var(--font-serif);font-size:1.1rem;letter-spacing:-.01em;margin-bottom:4px;}
+.topbar-title span{color:#90CAF9;}
+.topbar-part{font-size:.72rem;background:rgba(255,255,255,.2);border-radius:12px;padding:2px 10px;display:inline-block;margin-left:8px;}
+.topbar-meta{font-size:.72rem;opacity:.75;margin-bottom:8px;}
+.topbar-stats{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.tstat{background:rgba(255,255,255,.15);border-radius:20px;padding:3px 12px;font-size:.72rem;font-weight:600;}
+.tstat span{color:#FFE082;}
+.nav-tabs{display:flex;gap:2px;overflow-x:auto;padding-top:6px;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.ntab{background:rgba(255,255,255,.10);border:none;color:rgba(255,255,255,.75);padding:8px 13px;cursor:pointer;font-size:.68rem;font-weight:600;white-space:nowrap;border-radius:8px 8px 0 0;transition:all .2s;font-family:var(--font);}
+.ntab:hover{background:rgba(255,255,255,.2);color:#fff;}
+.ntab.active{background:#fff;color:#1565C0;font-weight:700;}
+
+/* ─── LAYOUT ─── */
+.container{max-width:1100px;margin:0 auto;padding:26px 18px 60px;}
+.tab-panel{display:none;animation:fadeIn .3s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ─── DIRECTION BOX ─── */
+.dir-box{background:linear-gradient(135deg,#E3F2FD,#EDE7F6);border-left:5px solid #1565C0;border-radius:var(--r);padding:16px 20px;margin-bottom:20px;}
+.dir-box h3{color:#1565C0;font-size:.9rem;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:7px;}
+.dir-box ul{list-style:none;padding:0;}
+.dir-box ul li{font-size:.83rem;color:#37474F;padding:3px 0 3px 18px;position:relative;}
+.dir-box ul li::before{content:"▶";position:absolute;left:0;color:#1565C0;font-size:.65rem;top:6px;}
+
+/* ─── SECTION HEADINGS ─── */
+h2.sec-head{font-family:var(--font-serif);font-size:1.5rem;color:var(--gray-900);margin-bottom:4px;letter-spacing:-.02em;}
+p.sec-sub{font-size:.84rem;color:var(--gray-600);margin-bottom:18px;line-height:1.6;}
+
+/* ─── CARDS ─── */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:20px;}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:20px;}
+.card-blue{border-top:4px solid var(--blue);}
+.card-green{border-top:4px solid var(--green);}
+.card-yellow{border-top:4px solid var(--yellow);}
+.card-red{border-top:4px solid var(--red-m);}
+.card-purple{border-top:4px solid var(--purple-m);}
+.card-teal{border-top:4px solid var(--teal);}
+.card h3{font-size:.92rem;font-weight:700;margin-bottom:7px;}
+.card p,.card li{font-size:.81rem;line-height:1.65;color:#455A64;}
+
+/* ─── CONCEPT BOXES ─── */
+.cx{border-radius:var(--r-sm);padding:13px 17px;margin:10px 0;}
+.cx-blue{background:var(--blue-l);border-left:4px solid var(--blue-m);}
+.cx-green{background:var(--green-l);border-left:4px solid var(--green-m);}
+.cx-yellow{background:var(--yellow-l);border-left:4px solid var(--yellow-m);}
+.cx-red{background:var(--red-l);border-left:4px solid var(--red-m);}
+.cx-purple{background:var(--purple-l);border-left:4px solid var(--purple-m);}
+.cx-orange{background:var(--orange-l);border-left:4px solid #FF6D00;}
+.cx-teal{background:var(--teal-l);border-left:4px solid var(--teal);}
+.cx-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.cx-blue .cx-title{color:var(--blue);}
+.cx-green .cx-title{color:var(--green);}
+.cx-yellow .cx-title{color:var(--yellow);}
+.cx-red .cx-title{color:var(--red);}
+.cx-purple .cx-title{color:var(--purple);}
+.cx-orange .cx-title{color:var(--orange);}
+.cx-teal .cx-title{color:var(--teal);}
+.cx p,.cx li{font-size:.82rem;line-height:1.65;color:#37474F;}
+
+/* ─── ACCORDION ─── */
+.acc{border:1px solid var(--gray-200);border-radius:var(--r);overflow:hidden;margin-bottom:10px;}
+.acc-hdr{background:#fff;padding:13px 17px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.86rem;border:none;width:100%;text-align:left;transition:background .2s;font-family:var(--font);}
+.acc-hdr:hover{background:var(--gray-50);}
+.acc-hdr.open{background:var(--blue-l);color:var(--blue);}
+.acc-arrow{transition:transform .3s;font-size:.78rem;}
+.acc-hdr.open .acc-arrow{transform:rotate(180deg);}
+.acc-body{display:none;padding:14px 17px;background:#fff;border-top:1px solid var(--gray-200);font-size:.82rem;line-height:1.7;color:#455A64;}
+.acc-body.open{display:block;}
+
+/* ─── TABLE ─── */
+.tbl{width:100%;border-collapse:collapse;font-size:.8rem;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);}
+.tbl th{background:var(--blue);color:#fff;padding:9px 13px;text-align:left;font-weight:700;}
+.tbl td{padding:8px 13px;border-bottom:1px solid var(--gray-200);vertical-align:top;}
+.tbl tr:nth-child(even) td{background:var(--gray-50);}
+.tbl tr:hover td{background:var(--blue-l);}
+.t-y{color:var(--green);font-weight:700;}
+.t-n{color:var(--red-m);font-weight:700;}
+.t-v{color:var(--yellow);font-weight:700;}
+
+/* ─── SUB-TABS ─── */
+.stabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;}
+.stab{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:var(--r-sm);padding:6px 13px;cursor:pointer;font-size:.76rem;font-weight:600;color:var(--gray-600);transition:all .2s;font-family:var(--font);}
+.stab:hover{background:var(--blue-l);color:var(--blue);}
+.stab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.spanel{display:none;}
+.spanel.active{display:block;}
+
+/* ─── QUIZ BLOCKS ─── */
+.qblock{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;border-left:4px solid var(--blue);}
+.qblock.qc{border-left-color:var(--green);}
+.qblock.qw{border-left-color:var(--red-m);}
+.qnum{font-size:.68rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.qtext{font-size:.9rem;font-weight:600;line-height:1.5;color:var(--gray-900);margin-bottom:12px;}
+.qopts{display:flex;flex-direction:column;gap:7px;}
+.qopt{background:var(--gray-50);border:2px solid var(--gray-200);border-radius:var(--r-sm);padding:9px 13px;cursor:pointer;font-size:.82rem;transition:all .2s;text-align:left;font-family:var(--font);line-height:1.4;}
+.qopt:hover:not([disabled]){background:var(--blue-l);border-color:var(--blue-m);color:var(--blue);}
+.qopt.correct{background:var(--green-l);border-color:var(--green-m);color:var(--green);font-weight:600;}
+.qopt.wrong{background:var(--red-l);border-color:var(--red-m);color:var(--red);}
+.qopt[disabled]{cursor:default;}
+.rat-box{display:none;margin-top:12px;background:linear-gradient(135deg,#E8F5E9,#E3F2FD);border-radius:var(--r-sm);padding:13px 15px;}
+.rat-box.show{display:block;}
+.rat-title{font-size:.72rem;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.rat-text{font-size:.8rem;line-height:1.65;color:#37474F;}
+.rat-clue{background:#fff;border-radius:6px;padding:7px 11px;margin-top:7px;border:1px solid var(--green-m);}
+.rat-clue-lbl{font-size:.68rem;font-weight:700;color:var(--blue);margin-bottom:2px;}
+
+/* ─── BUTTONS ─── */
+.btn{border:none;border-radius:var(--r-sm);padding:9px 18px;font-size:.81rem;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.02em;font-family:var(--font);}
+.btn-blue{background:var(--blue);color:#fff;}
+.btn-blue:hover{background:#0D47A1;transform:translateY(-1px);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:#1B5E20;}
+.btn-purple{background:var(--purple);color:#fff;}
+.btn-purple:hover{background:#311B92;}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-gray{background:var(--gray-200);color:var(--gray-800);}
+.btn-gray:hover{background:var(--gray-300);}
+.btn-lg{padding:13px 30px;font-size:.92rem;}
+.btn-sm{padding:6px 13px;font-size:.75rem;}
+
+/* ─── REVEAL ─── */
+.rev-btn{background:var(--purple-l);border:2px solid var(--purple-m);color:var(--purple);border-radius:var(--r-sm);padding:7px 15px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:var(--font);}
+.rev-btn:hover{background:var(--purple);color:#fff;}
+.rev-body{display:none;margin-top:9px;}
+.rev-body.show{display:block;}
+
+/* ─── PAYER CARDS ─── */
+.payer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin:14px 0;}
+.payer-card{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:16px;cursor:pointer;transition:all .25s;border-top:5px solid transparent;position:relative;}
+.payer-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.pc-a{border-top-color:#1565C0;}
+.pc-b{border-top-color:#2E7D32;}
+.pc-c{border-top-color:#4A148C;}
+.pc-d{border-top-color:#E65100;}
+.pc-mc{border-top-color:#00695C;}
+.pc-mg{border-top-color:#880E4F;}
+.pc-tr{border-top-color:#1A237E;}
+.pc-letter{font-size:1.8rem;font-weight:900;line-height:1;margin-bottom:5px;}
+.pc-a .pc-letter{color:#1565C0;} .pc-b .pc-letter{color:#2E7D32;}
+.pc-c .pc-letter{color:#4A148C;} .pc-d .pc-letter{color:#E65100;}
+.pc-mc .pc-letter{color:#00695C;} .pc-mg .pc-letter{color:#880E4F;}
+.pc-tr .pc-letter{color:#1A237E;}
+.pc-label{font-size:.72rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;}
+.pc-name{font-size:.87rem;font-weight:700;margin:3px 0;}
+.pc-detail{font-size:.76rem;color:var(--gray-600);line-height:1.5;}
+.pc-expand{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);}
+.pc-expand p{font-size:.78rem;color:#455A64;line-height:1.6;}
+.payer-card.expanded .pc-expand{display:block;}
+.expand-hint{font-size:.67rem;color:var(--blue-m);margin-top:7px;font-style:italic;}
+
+/* ─── SCENARIO BOX ─── */
+.scenario{background:linear-gradient(135deg,#FFF8E1,#FFF3E0);border:2px solid #FFD54F;border-radius:var(--r);padding:14px 18px;margin:12px 0;}
+.scenario-lbl{font-size:.68rem;font-weight:800;color:var(--yellow);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
+.scenario-text{font-size:.83rem;line-height:1.65;color:#37474F;font-style:italic;}
+
+/* ─── SORT ACTIVITY ─── */
+.sort-pool{display:flex;flex-wrap:wrap;gap:7px;min-height:46px;padding:10px;background:var(--gray-50);border-radius:var(--r-sm);border:2px dashed var(--gray-300);margin-bottom:10px;}
+.sort-chip{background:#fff;border:2px solid var(--gray-300);border-radius:6px;padding:5px 11px;cursor:pointer;font-size:.78rem;font-weight:600;user-select:none;transition:all .2s;}
+.sort-chip:hover{border-color:var(--blue-m);background:var(--blue-l);}
+.sort-chip.selected{border-color:var(--blue);background:var(--blue-l);color:var(--blue);}
+.sort-chip.placed-correct{border-color:var(--green-m);background:var(--green-l);color:var(--green);cursor:default;}
+.sort-chip.placed-wrong{border-color:var(--red-m);background:var(--red-l);color:var(--red);}
+.sort-zone{min-height:55px;padding:10px;background:#fff;border-radius:var(--r-sm);border:2px dashed var(--gray-300);transition:all .2s;margin-bottom:8px;}
+.sort-zone-lbl{font-size:.72rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;margin-bottom:6px;}
+
+/* ─── WORKFLOW ─── */
+.workflow{display:flex;flex-wrap:wrap;gap:0;align-items:flex-start;margin:14px 0;}
+.wf-step{background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;flex:1;min-width:140px;position:relative;cursor:pointer;transition:all .2s;border-top:4px solid var(--blue);}
+.wf-step:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.wf-num{font-size:1.4rem;font-weight:900;color:var(--blue);line-height:1;}
+.wf-title{font-size:.82rem;font-weight:700;margin:4px 0 3px;}
+.wf-desc{font-size:.75rem;color:var(--gray-600);line-height:1.5;}
+.wf-arrow{color:var(--gray-300);font-size:1.3rem;padding:14px 6px;align-self:center;}
+.wf-expand{display:none;margin-top:9px;padding-top:9px;border-top:1px solid var(--gray-200);}
+.wf-expand p{font-size:.77rem;color:#455A64;line-height:1.6;}
+.wf-step.expanded .wf-expand{display:block;}
+
+/* ─── TWO COL ─── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:640px){
+  .two-col{grid-template-columns:1fr;}
+  .hero-title{font-size:1.25rem;}
+  .ntab{padding:6px 9px;font-size:.63rem;}
+  .topbar-title{font-size:.9rem;}
+  .workflow{flex-direction:column;}
+  .wf-arrow{transform:rotate(90deg);align-self:center;padding:4px;}
+}
+
+/* ─── WELCOME HERO ─── */
+.hero{background:linear-gradient(135deg,#0D47A1 0%,#1565C0 50%,#4A148C 100%);border-radius:var(--r-lg);padding:38px 34px;color:#fff;margin-bottom:22px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:rgba(255,255,255,.04);border-radius:50%;}
+.hero-title{font-family:var(--font-serif);font-size:1.75rem;letter-spacing:-.03em;line-height:1.2;margin-bottom:8px;}
+.hero-title span{color:#90CAF9;}
+.hero-sub{font-size:.87rem;opacity:.85;line-height:1.6;max-width:580px;}
+
+/* ─── ORIENT GRID ─── */
+.orient-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin:18px 0;}
+.oc{background:#fff;border-radius:var(--r);padding:13px;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;}
+.oc:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.oc-icon{font-size:1.7rem;margin-bottom:5px;}
+.oc-lbl{font-size:.76rem;font-weight:700;color:var(--gray-800);}
+.oc-desc{font-size:.69rem;color:var(--gray-600);margin-top:2px;line-height:1.4;}
+
+/* ─── TAGS ─── */
+.tag{display:inline-block;border-radius:20px;padding:2px 9px;font-size:.68rem;font-weight:700;margin:2px;}
+.tag-blue{background:var(--blue-l);color:var(--blue);}
+.tag-green{background:var(--green-l);color:var(--green);}
+.tag-red{background:var(--red-l);color:var(--red);}
+.tag-purple{background:var(--purple-l);color:var(--purple);}
+.tag-yellow{background:var(--yellow-l);color:var(--yellow);}
+
+/* ─── DIVIDER ─── */
+.divider{height:2px;background:linear-gradient(90deg,var(--blue-l),var(--purple-l));border-radius:2px;margin:22px 0;}
+
+/* ─── NOTIF ─── */
+#notif{position:fixed;top:78px;right:18px;background:var(--green);color:#fff;border-radius:var(--r-sm);padding:9px 16px;font-size:.8rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:999;transform:translateX(130%);transition:transform .3s;}
+#notif.show{transform:translateX(0);}
+
+/* ─── PART 2 BANNER ─── */
+.part2-banner{background:linear-gradient(135deg,#4A148C,#1565C0);color:#fff;border-radius:var(--r-lg);padding:26px 28px;text-align:center;margin-top:28px;}
+.part2-banner h3{font-family:var(--font-serif);font-size:1.3rem;margin-bottom:8px;}
+.part2-banner p{font-size:.84rem;opacity:.88;margin-bottom:16px;}
+
+/* ─── FOOTER ─── */
+.footer{background:#1A237E;color:rgba(255,255,255,.7);text-align:center;padding:16px;font-size:.75rem;margin-top:40px;}
+.footer strong{color:#fff;}
+</style>
+</head>
+<body>
+
+<div id="notif"></div>
+
+<!-- ═══ TOP BAR ═══ -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title">🏥 CBCS Insurance Verification & Government Payer <span>Interactive Mastery Lab</span> <span class="topbar-part">Part 1 of 2</span></div>
+    <div class="topbar-meta">NHA Certified Billing & Coding Specialist — Tabs 1–6: Welcome · Govt Insurance · Govt vs Private · L1 Practice · Eligibility · Auth & Referrals</div>
+    <div class="topbar-stats">
+      <div class="tstat">Score: <span id="gScore">0</span> pts</div>
+      <div class="tstat">Answered: <span id="gAnswered">0</span></div>
+      <div class="tstat">Accuracy: <span id="gAcc">—</span></div>
+      <div class="tstat">Badges: <span id="gBadges">0</span>/6</div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="ntab active" onclick="showTab(0)">🏠 Welcome</button>
+      <button class="ntab" onclick="showTab(1)">🔵 Govt Insurance</button>
+      <button class="ntab" onclick="showTab(2)">⚖️ Govt vs Private</button>
+      <button class="ntab" onclick="showTab(3)">🎯 L1 Practice</button>
+      <button class="ntab" onclick="showTab(4)">✅ Eligibility</button>
+      <button class="ntab" onclick="showTab(5)">📋 Auth & Referrals</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ TAB 0: WELCOME ═══════════════════════════ -->
+<div id="tab0" class="tab-panel active">
+<div class="container">
+  <div class="hero">
+    <div class="hero-title">Welcome to Your<br><span>CBCS Mastery Lab — Part 1</span></div>
+    <p class="hero-sub">A fully self-directed, interactive insurance review lab. No instructor needed — this site teaches, checks, and challenges you. Complete all 6 tabs in this part, then open Part 2 to continue with COB, Patient Responsibility, Denial Lab, Arena, Timed Challenge, and Rapid Review.</p>
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-blue btn-lg" onclick="showTab(1)">▶ Start Lesson 1</button>
+      <button class="btn btn-gray btn-lg" onclick="toggleAcc('how-works')">ℹ How This Lab Works</button>
+    </div>
+  </div>
+
+  <div class="acc">
+    <button class="acc-hdr" onclick="toggleAcc('how-works')">📖 How This Lab Works — Click to Read <span class="acc-arrow">▼</span></button>
+    <div class="acc-body" id="how-works">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;">
+        <div class="cx cx-blue"><div class="cx-title">📚 Teaching</div><p>Each tab teaches key concepts. Read carefully — the site explains everything.</p></div>
+        <div class="cx cx-green"><div class="cx-title">✅ Concept Checks</div><p>Click an answer. Green = correct. Red = wrong. A rationale panel appears after every answer.</p></div>
+        <div class="cx cx-yellow"><div class="cx-title">⚠️ Caution Boxes</div><p>Yellow = commonly confused concepts. Read these very carefully.</p></div>
+        <div class="cx cx-red"><div class="cx-title">🚫 Trap Alerts</div><p>Red/orange = dangerous misunderstandings that cause denials. Pay close attention.</p></div>
+        <div class="cx cx-orange"><div class="cx-title">🎯 Scoring</div><p>+10 pts for correct on first try. Points add up globally. Earn all 6 Part 1 badges!</p></div>
+        <div class="cx cx-purple"><div class="cx-title">📂 Two Parts</div><p>Part 1 = Tabs 1–6. Open Part 2 after completing this file for COB, Denial Lab, Arena, and Timed Challenge.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h2 class="sec-head">🗺️ Part 1 Learning Path</h2>
+  <p class="sec-sub">Complete all 6 tabs below in order, then open Part 2 to finish the full lab.</p>
+
+  <div class="orient-grid">
+    <div class="oc" onclick="showTab(1)"><div class="oc-icon">🔵</div><div class="oc-lbl">Govt Insurance</div><div class="oc-desc">Medicare, Medicaid, Medigap, TRICARE</div></div>
+    <div class="oc" onclick="showTab(2)"><div class="oc-icon">⚖️</div><div class="oc-lbl">Govt vs Private</div><div class="oc-desc">Compare, analyze, evaluate</div></div>
+    <div class="oc" onclick="showTab(3)"><div class="oc-icon">🎯</div><div class="oc-lbl">L1 Practice Studio</div><div class="oc-desc">Application, analysis, evaluation Qs</div></div>
+    <div class="oc" onclick="showTab(4)"><div class="oc-icon">✅</div><div class="oc-lbl">Eligibility</div><div class="oc-desc">Verification workflows</div></div>
+    <div class="oc" onclick="showTab(5)"><div class="oc-icon">📋</div><div class="oc-lbl">Auth & Referrals</div><div class="oc-desc">Pre-auth, referrals, predetermination</div></div>
+    <div class="oc" style="background:linear-gradient(135deg,#EDE7F6,#E3F2FD);border:2px dashed #7E57C2;"><div class="oc-icon">📂</div><div class="oc-lbl" style="color:#4A148C;">→ Part 2</div><div class="oc-desc">COB, Denial Lab, Arena, Challenge</div></div>
+  </div>
+
+  <!-- Orientation Quiz -->
+  <div class="divider"></div>
+  <h2 class="sec-head">🧪 Quick Orientation Check</h2>
+  <p class="sec-sub">Two quick questions to make sure you know how the site works before diving in.</p>
+
+  <div id="oq1" class="qblock">
+    <div class="qnum">Orientation Q1</div>
+    <div class="qtext">When an answer choice turns GREEN after you click it, what does that mean?</div>
+    <div class="qopts">
+      <button class="qopt" onclick="ansQ('oq1',0,1)">A. Partially correct — keep guessing</button>
+      <button class="qopt" onclick="ansQ('oq1',1,1,'Green = right answer. The site immediately shows whether you are correct (green) or incorrect (red), then reveals a rationale panel explaining the reasoning.','Clue: Color signals tell you immediately if you\'re on track.')">B. That is the correct answer — read the rationale below!</button>
+      <button class="qopt" onclick="ansQ('oq1',2,1)">C. The site is processing</button>
+      <button class="qopt" onclick="ansQ('oq1',3,1)">D. That option will be skipped</button>
+    </div>
+    <div class="rat-box" id="rat-oq1"></div>
+  </div>
+
+  <div id="oq2" class="qblock">
+    <div class="qnum">Orientation Q2</div>
+    <div class="qtext">What is the MOST important step after answering each practice question?</div>
+    <div class="qopts">
+      <button class="qopt" onclick="ansQ('oq2',0,2)">A. Move to the next question immediately</button>
+      <button class="qopt" onclick="ansQ('oq2',1,2)">B. Memorize the answer choice letter</button>
+      <button class="qopt" onclick="ansQ('oq2',2,2,'CORRECT! Always read the full rationale — why the right answer is right, why wrong answers are wrong, what the billing implication is, and how to think about similar questions. This is how you build exam-ready, job-ready knowledge.','Clue: The rationale box is the most valuable part of every question.')">C. Read the full rationale — why correct, why wrong, what clue mattered</button>
+      <button class="qopt" onclick="ansQ('oq2',3,2)">D. Go straight to Part 2 immediately</button>
+    </div>
+    <div class="rat-box" id="rat-oq2"></div>
+  </div>
+
+  <div class="cx cx-green" style="margin-top:14px;"><div class="cx-title">✅ You're Ready!</div><p>Click <strong>Start Lesson 1</strong> above or click the <strong>Govt Insurance</strong> tab to begin. Work through every tab in order — open Part 2 when you're done here.</p></div>
+</div>
+</div>
+
+<!-- ═══════════════════════════ TAB 1: GOVERNMENT INSURANCE ═══════════════════════════ -->
+<div id="tab1" class="tab-panel">
+<div class="container">
+  <h2 class="sec-head">🔵 Lesson 1: Government Insurance Review</h2>
+  <p class="sec-sub">Learn Medicare, Medicaid, Medigap, and TRICARE with deep operational understanding — not just definitions.</p>
+
+  <div class="dir-box">
+    <h3>📌 What To Do Here</h3>
+    <ul>
+      <li>Click each payer card to expand full details</li>
+      <li>Study the comparison table carefully</li>
+      <li>Complete all sub-tab concept checks</li>
+      <li>Answer 80%+ correctly before moving on</li>
+      <li><strong>Points available:</strong> Up to 110 pts</li>
+    </ul>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" onclick="showSub('gov',0)">Medicare A–D</button>
+    <button class="stab" onclick="showSub('gov',1)">Medicaid</button>
+    <button class="stab" onclick="showSub('gov',2)">Medigap & TRICARE</button>
+    <button class="stab" onclick="showSub('gov',3)">Compare Table</button>
+    <button class="stab" onclick="showSub('gov',4)">Concept Checks</button>
+  </div>
+
+  <!-- Medicare -->
+  <div id="gov-s0" class="spanel active">
+    <div class="cx cx-blue"><div class="cx-title">📘 What Is Medicare?</div><p>Medicare is a <strong>federal</strong> health insurance program administered by CMS (Centers for Medicare &amp; Medicaid Services). It is <strong>NOT income-based</strong> — it is based on age (65+) and/or qualifying conditions. It is divided into four parts, each with distinct billing implications.</p></div>
+
+    <div class="payer-grid">
+      <div class="payer-card pc-a" onclick="this.classList.toggle('expanded')">
+        <div class="pc-letter">A</div>
+        <div class="pc-label">Medicare</div>
+        <div class="pc-name">Hospital Insurance</div>
+        <div class="pc-detail">Inpatient-oriented coverage</div>
+        <div class="expand-hint">Tap to expand ▼</div>
+        <div class="pc-expand">
+          <p><strong>Covers:</strong> Inpatient hospital stays · Skilled Nursing Facility (SNF) after qualifying stay · Hospice · Some home health care · Inpatient psychiatric</p><br>
+          <p><strong>Billing Implication:</strong> When a patient is <em>admitted</em> (not just observed), Part A applies. Know the difference — observation stays may be Part B.</p><br>
+          <p><strong>Cost:</strong> Most get premium-free Part A if they paid Medicare taxes long enough. Deductible per benefit period.</p>
+        </div>
+      </div>
+      <div class="payer-card pc-b" onclick="this.classList.toggle('expanded')">
+        <div class="pc-letter">B</div>
+        <div class="pc-label">Medicare</div>
+        <div class="pc-name">Medical Insurance</div>
+        <div class="pc-detail">Outpatient/physician services</div>
+        <div class="expand-hint">Tap to expand ▼</div>
+        <div class="pc-expand">
+          <p><strong>Covers:</strong> Physician/provider visits · Outpatient hospital services · Preventive services · Durable Medical Equipment (DME) · Lab, X-ray, imaging (outpatient) · Ambulance</p><br>
+          <p><strong>Billing Implication:</strong> Part B pays 80% of approved amount after annual deductible. Patient owes 20% coinsurance — unless supplemental plan covers it.</p><br>
+          <p><strong>Cost:</strong> Monthly premium required. Late enrollment = permanent penalty.</p>
+        </div>
+      </div>
+      <div class="payer-card pc-c" onclick="this.classList.toggle('expanded')">
+        <div class="pc-letter">C</div>
+        <div class="pc-label">Medicare</div>
+        <div class="pc-name">Medicare Advantage</div>
+        <div class="pc-detail">Private plan alternative to Original Medicare</div>
+        <div class="expand-hint">Tap to expand ▼</div>
+        <div class="pc-expand">
+          <p><strong>What it is:</strong> Private insurers approved by CMS offer plans that bundle Part A + B (usually + D). NOT the same as Medigap.</p><br>
+          <p><strong>Billing Implication:</strong> Bill the private MA plan — NOT CMS directly. Network rules apply. Prior auth requirements vary by plan.</p><br>
+          <p><strong>Key Exam Point:</strong> Part C IS NOT a supplement. It REPLACES Original Medicare for enrolled beneficiaries.</p>
+        </div>
+      </div>
+      <div class="payer-card pc-d" onclick="this.classList.toggle('expanded')">
+        <div class="pc-letter">D</div>
+        <div class="pc-label">Medicare</div>
+        <div class="pc-name">Prescription Drug Plan</div>
+        <div class="pc-detail">Outpatient prescription coverage</div>
+        <div class="expand-hint">Tap to expand ▼</div>
+        <div class="pc-expand">
+          <p><strong>Covers:</strong> Outpatient prescription drugs from a pharmacy. Does NOT cover drugs administered in a hospital (Part A) or infused in a physician office (may be Part B).</p><br>
+          <p><strong>Billing Implication:</strong> Part D claims go to the Prescription Drug Plan — not to Medicare directly. The PDP has its own formulary and cost-sharing.</p><br>
+          <p><strong>Key Exam Point:</strong> Part D = pharmacy drugs only. In-office injections/infusions = usually Part B.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="cx cx-red"><div class="cx-title">🚫 Critical Exam Trap</div><p><strong>Part C ≠ Supplement.</strong> Part C (Medicare Advantage) REPLACES Original Medicare through a private plan. Medigap SUPPLEMENTS Original Medicare. These require completely different billing workflows. Never treat them the same.</p></div>
+    <div class="cx cx-yellow"><div class="cx-title">⚠️ Inpatient vs. Observation</div><p>A patient "admitted" to the hospital = Part A. A patient in the hospital under "observation status" = Part B (outpatient). This distinction affects patient responsibility significantly.</p></div>
+  </div>
+
+  <!-- Medicaid -->
+  <div id="gov-s1" class="spanel">
+    <div class="cx cx-blue"><div class="cx-title">📘 What Is Medicaid?</div><p>Medicaid is a <strong>joint federal-state program</strong> providing health coverage to <strong>low-income</strong> individuals and families. Unlike Medicare, it IS income-based. Each state administers its own Medicaid program within federal guidelines — so rules, benefits, and eligible populations vary by state. This makes verification critical.</p></div>
+
+    <div class="payer-card pc-mc" style="max-width:440px;margin:14px 0;" onclick="this.classList.toggle('expanded')">
+      <div class="pc-letter">MC</div>
+      <div class="pc-label">Program</div>
+      <div class="pc-name">Medicaid</div>
+      <div class="pc-detail">Joint federal-state, income-based</div>
+      <div class="expand-hint">Tap to expand ▼</div>
+      <div class="pc-expand">
+        <p><strong>Who it covers:</strong> Low-income adults · Children · Pregnant women · Elderly (may dual-qualify with Medicare) · Disabled individuals meeting income criteria</p><br>
+        <p><strong>Billing Implications:</strong> Medicaid is always the PAYER OF LAST RESORT. If patient has any other insurance, bill that first. Medicaid has the lowest reimbursement rates.</p><br>
+        <p><strong>Verification Why:</strong> Medicaid eligibility can change monthly. Never assume — always verify for the date of service.</p>
+      </div>
+    </div>
+
+    <div class="cx cx-orange"><div class="cx-title">💡 Revenue-Cycle Lens</div><p>Medicaid requires verification at every visit — not just at intake. A claim submitted for a date when the patient's Medicaid had lapsed will be denied. Always confirm eligibility for the specific DOS (Date of Service).</p></div>
+    <div class="cx cx-yellow"><div class="cx-title">⚠️ Medicare ≠ Medicaid</div><p>These are two separate programs. Medicare = federal, age/disability-based. Medicaid = state-administered, income-based. A person CAN have both (dual eligible) — Medicare pays first, Medicaid pays last (payer of last resort).</p></div>
+  </div>
+
+  <!-- Medigap & TRICARE -->
+  <div id="gov-s2" class="spanel">
+    <div class="cx cx-blue"><div class="cx-title">📘 Medigap (Medicare Supplement Insurance)</div><p>Medigap is private insurance that supplements Original Medicare (Parts A and B). It covers cost-sharing gaps — like the 20% Part B coinsurance — that Medicare does not pay. Medigap only works with Original Medicare, NOT with Medicare Advantage (Part C).</p></div>
+
+    <div class="payer-card pc-mg" style="max-width:440px;margin:14px 0;" onclick="this.classList.toggle('expanded')">
+      <div class="pc-letter">MG</div>
+      <div class="pc-label">Supplemental</div>
+      <div class="pc-name">Medigap</div>
+      <div class="pc-detail">Fills cost-sharing gaps in Original Medicare</div>
+      <div class="expand-hint">Tap to expand ▼</div>
+      <div class="pc-expand">
+        <p><strong>What it covers:</strong> Part A and/or Part B cost-sharing — deductibles, coinsurance, copays (varies by plan letter)</p><br>
+        <p><strong>Billing:</strong> Bill Medicare first. After Medicare adjudicates, bill Medigap as secondary. Many Medigap claims are cross-over claims — sent automatically.</p><br>
+        <p><strong>Critical Point:</strong> Medigap + Original Medicare ≠ Medicare Advantage. DO NOT mix these workflows.</p>
+      </div>
+    </div>
+
+    <div class="cx cx-blue" style="margin-top:18px;"><div class="cx-title">📘 TRICARE</div><p>TRICARE is the healthcare program for <strong>active duty military, veterans, and their families</strong>. Administered by the Department of Defense. TRICARE has its own network, rules, and prior authorization requirements. Do not assume civilian insurance rules apply.</p></div>
+
+    <div class="payer-card pc-tr" style="max-width:440px;margin:14px 0;" onclick="this.classList.toggle('expanded')">
+      <div class="pc-letter">TR</div>
+      <div class="pc-label">Military</div>
+      <div class="pc-name">TRICARE</div>
+      <div class="pc-detail">Dept. of Defense healthcare program</div>
+      <div class="expand-hint">Tap to expand ▼</div>
+      <div class="pc-expand">
+        <p><strong>Who:</strong> Active duty military members · Retired military and families · Qualifying veterans</p><br>
+        <p><strong>Plans include:</strong> TRICARE Prime (HMO-like) · TRICARE Select (PPO-like) · TRICARE for Life (Medicare supplement for qualifying retirees)</p><br>
+        <p><strong>Billing:</strong> Verify TRICARE plan type. TRICARE for Life patients have Medicare primary, TRICARE secondary.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare Table -->
+  <div id="gov-s3" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:12px;">Government Payer Comparison</h3>
+    <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>Feature</th><th>Medicare A</th><th>Medicare B</th><th>Medicare C</th><th>Medicare D</th><th>Medicaid</th><th>Medigap</th><th>TRICARE</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Type</strong></td><td>Federal</td><td>Federal</td><td>Private/Federal</td><td>Private/Federal</td><td>Federal+State</td><td>Private</td><td>DoD</td></tr>
+        <tr><td><strong>Income-Based?</strong></td><td class="t-n">No</td><td class="t-n">No</td><td class="t-n">No</td><td class="t-n">No</td><td class="t-y">Yes</td><td class="t-n">No</td><td class="t-n">No</td></tr>
+        <tr><td><strong>Primary Focus</strong></td><td>Inpatient</td><td>Outpatient</td><td>Bundles A+B+D</td><td>Pharmacy Rx</td><td>Broad coverage</td><td>Cost-sharing gaps</td><td>Military beneficiaries</td></tr>
+        <tr><td><strong>Payer of Last Resort?</strong></td><td class="t-n">No</td><td class="t-n">No</td><td class="t-n">No</td><td class="t-n">No</td><td class="t-y">Yes</td><td class="t-n">No</td><td class="t-n">No</td></tr>
+        <tr><td><strong>Verification Critical?</strong></td><td class="t-y">Yes</td><td class="t-y">Yes</td><td class="t-y">Yes</td><td class="t-y">Yes</td><td class="t-y">Yes — monthly</td><td class="t-y">Yes</td><td class="t-y">Yes</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="cx cx-purple" style="margin-top:14px;"><div class="cx-title">🎯 Memory Aid</div><p><strong>A</strong> = Admits (inpatient) · <strong>B</strong> = Benefit/outpatient · <strong>C</strong> = Choice (private Advantage plan) · <strong>D</strong> = Drugs (pharmacy) · <strong>Medigap</strong> = Fills Medicare GAPS · <strong>TRICARE</strong> = Troops</p></div>
+  </div>
+
+  <!-- Concept Checks -->
+  <div id="gov-s4" class="spanel">
+    <div id="g1" class="qblock">
+      <div class="qnum">Govt Insurance Q1</div>
+      <div class="qtext">A Medicare patient is admitted to the hospital for 4 days for pneumonia. Which Medicare part primarily covers the inpatient hospital costs?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('g1',0,0,'CORRECT! Part A is Hospital Insurance — it covers inpatient admissions. The key word is ADMITTED. When formally admitted, Part A applies. Outpatient observation stays are Part B.','Key clue: ADMITTED = inpatient = Part A.')">A. Part A — Hospital Insurance</button>
+        <button class="qopt" onclick="ansQ('g1',1,0,'Part B covers outpatient services: physician visits, outpatient procedures, DME. An inpatient admission (4-day hospital stay) is Part A.','')">B. Part B — Medical Insurance</button>
+        <button class="qopt" onclick="ansQ('g1',2,0,'Part D covers outpatient prescription drugs. Hospital stays are Part A.','')">C. Part D — Prescription Drug</button>
+        <button class="qopt" onclick="ansQ('g1',3,0,'Part C (Medicare Advantage) is a private plan delivery system — it is not a specific coverage type. Inpatient stays are Part A.','')">D. Part C — Medicare Advantage</button>
+      </div>
+      <div class="rat-box" id="rat-g1"></div>
+    </div>
+
+    <div id="g2" class="qblock">
+      <div class="qnum">Govt Insurance Q2</div>
+      <div class="qtext">A biller receives a claim for a Medicare patient who is enrolled in a Medicare Advantage plan. Where should the claim be submitted?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('g2',0,1,'Not CMS/Medicare directly. Medicare Advantage patients get coverage through a PRIVATE plan approved by CMS. Claims go to the private MA insurer — not to CMS. This is a critical workflow difference.','Key clue: Medicare Advantage = private plan = bill the plan, not CMS.')">A. Directly to Medicare/CMS</button>
+        <button class="qopt" onclick="ansQ('g2',1,1,'CORRECT! Medicare Advantage (Part C) patients receive coverage through a private insurer approved by CMS. Claims must be submitted to that private plan — NOT to CMS. Each MA plan has its own rules, network, and prior auth requirements.','Key clue: Medicare Advantage = private plan = bill the plan, not CMS.')">B. To the private Medicare Advantage plan</button>
+        <button class="qopt" onclick="ansQ('g2',2,1,'Not the patient directly. The office bills the insurance, not the patient for the primary claim.','')">C. Directly to the patient</button>
+        <button class="qopt" onclick="ansQ('g2',3,1,'Not Medicaid unless the patient is dual-eligible and Medicaid is secondary. Primary billing for an MA patient goes to the private MA plan.','')">D. To Medicaid as secondary</button>
+      </div>
+      <div class="rat-box" id="rat-g2"></div>
+    </div>
+
+    <div id="g3" class="qblock">
+      <div class="qnum">Govt Insurance Q3</div>
+      <div class="qtext">Which of the following BEST describes Medigap?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('g3',0,2,'Not a government program. Medigap is PRIVATE insurance. It supplements — but is not part of — government Medicare.','Medigap = private supplement for Original Medicare GAPS.')">A. A federal government insurance program similar to Medicare</button>
+        <button class="qopt" onclick="ansQ('g3',1,2,'Not Part C. This is the most critical confusion on the exam. Part C (Medicare Advantage) REPLACES Original Medicare. Medigap SUPPLEMENTS Original Medicare. They require different billing workflows.','Medigap = private supplement for Original Medicare GAPS.')">B. The same as Medicare Part C (Medicare Advantage)</button>
+        <button class="qopt" onclick="ansQ('g3',2,2,'CORRECT! Medigap is private insurance that covers cost-sharing gaps in Original Medicare — like the 20% Part B coinsurance. It only works with Original Medicare (Parts A &amp; B), not with Medicare Advantage.','Medigap = private supplement for Original Medicare GAPS.')">C. A private supplement that covers Medicare cost-sharing gaps, used with Original Medicare</button>
+        <button class="qopt" onclick="ansQ('g3',3,2,'Not a Medicaid program. Medigap has nothing to do with Medicaid. These are completely different programs.','')">D. A Medicaid program for low-income Medicare patients</button>
+      </div>
+      <div class="rat-box" id="rat-g3"></div>
+    </div>
+
+    <div id="g4" class="qblock">
+      <div class="qnum">Govt Insurance Q4</div>
+      <div class="qtext">A patient has BOTH Medicare and Medicaid. Which payer should be billed FIRST?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('g4',0,0,'CORRECT! Medicare is primary when a patient has both Medicare and Medicaid. Medicaid is ALWAYS the payer of last resort — it pays only what remains after all other insurance has paid. Billing Medicaid first is a billing error.','Key rule: Medicaid = payer of LAST resort. Always.')">A. Medicare — Medicaid is always the payer of last resort</button>
+        <button class="qopt" onclick="ansQ('g4',1,0,'Not Medicaid first. Medicaid is the payer of last resort. Bill Medicare first, then Medicaid for any remaining balance.','Key rule: Medicaid = payer of LAST resort. Always.')">B. Medicaid — it is a government program</button>
+        <button class="qopt" onclick="ansQ('g4',2,0,'Not simultaneously. Claims must follow COB order — primary first, then secondary.','')">C. Both simultaneously</button>
+        <button class="qopt" onclick="ansQ('g4',3,0,'Not the patient. Dual-eligible patients should not be billed first. Medicare is billed first; Medicaid handles remaining cost-sharing.','')">D. The patient directly</button>
+      </div>
+      <div class="rat-box" id="rat-g4"></div>
+    </div>
+
+    <div id="g5" class="qblock">
+      <div class="qnum">Govt Insurance Q5 — Analysis</div>
+      <div class="qtext">Why is verifying Medicaid eligibility monthly more critical than verifying most private insurance monthly?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('g5',0,0,'CORRECT! Medicaid eligibility can change every month based on income changes, life events, or administrative reviews. A patient who was eligible last month may not be this month. Submitting a claim for a date of service when the patient lacked eligibility = denial with potential write-off.','Revenue-cycle lens: Medicaid verification must happen at EVERY visit, for EVERY DOS.')">A. Medicaid eligibility can change monthly based on income and life events — a lapse means denial</button>
+        <button class="qopt" onclick="ansQ('g5',1,0,'Not because Medicaid pays more. Medicaid typically pays the lowest rates. The reason to verify carefully is to prevent claim denials for ineligible dates of service.','')">B. Medicaid always pays more than private insurance</button>
+        <button class="qopt" onclick="ansQ('g5',2,0,'Not because rules are stricter in general. The critical reason is that eligibility itself is volatile — patients can lose and regain Medicaid month to month.','')">C. Because Medicaid has stricter prior authorization rules than other payers</button>
+        <button class="qopt" onclick="ansQ('g5',3,0,'Not because of documentation requirements. Eligibility volatility is the core issue.','')">D. Because Medicaid requires more clinical documentation than private insurance</button>
+      </div>
+      <div class="rat-box" id="rat-g5"></div>
+    </div>
+
+    <button class="btn btn-blue" onclick="showTab(2);awardBadge('govt')" style="margin-top:10px;">Continue → Govt vs Private ▶</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════ TAB 2: GOVT VS PRIVATE ═══════════════════════════ -->
+<div id="tab2" class="tab-panel">
+<div class="container">
+  <h2 class="sec-head">⚖️ Lesson 1: Government vs. Private Insurance</h2>
+  <p class="sec-sub">Compare payer types analytically — understand the billing implications, not just the categories.</p>
+
+  <div class="dir-box">
+    <h3>📌 What To Do Here</h3>
+    <ul>
+      <li>Read each comparison section carefully</li>
+      <li>Answer the higher-order thinking questions</li>
+      <li>Focus on billing implications, not just conceptual differences</li>
+      <li><strong>Points available:</strong> Up to 80 pts</li>
+    </ul>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" onclick="showSub('gvp',0)">Key Differences</button>
+    <button class="stab" onclick="showSub('gvp',1)">Higher-Order Analysis</button>
+    <button class="stab" onclick="showSub('gvp',2)">Concept Checks</button>
+  </div>
+
+  <div id="gvp-s0" class="spanel active">
+    <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>Dimension</th><th>Government Insurance</th><th>Private Insurance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Source</strong></td><td>Federal (Medicare) or Federal+State (Medicaid) or DoD (TRICARE)</td><td>Employer-sponsored, individual market, or ACA Marketplace</td></tr>
+        <tr><td><strong>Eligibility</strong></td><td>Age/disability (Medicare) or income (Medicaid) or military status (TRICARE)</td><td>Employment, purchase, or income for ACA subsidies</td></tr>
+        <tr><td><strong>Rules Flexibility</strong></td><td>Highly standardized (Medicare rules are federal rules)</td><td>Varies greatly by plan, insurer, and employer</td></tr>
+        <tr><td><strong>Network Structure</strong></td><td>Medicare: broad network; Medicaid: limited; TRICARE: military network</td><td>HMO: restricted; PPO: flexible; EPO: exclusive; POS: hybrid</td></tr>
+        <tr><td><strong>Billing Complexity</strong></td><td>Standardized forms/rules BUT payer-specific nuances (esp. Medicaid state variation)</td><td>High variation — must know each plan's rules separately</td></tr>
+        <tr><td><strong>Patient Responsibility</strong></td><td>Medicare: deductible + 20% coinsurance (unless supplement); Medicaid: minimal/zero</td><td>Highly variable — copay, deductible, coinsurance all depend on plan</td></tr>
+        <tr><td><strong>Payer of Last Resort</strong></td><td>Medicaid only</td><td>Never — private plans follow COB rules</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="cx cx-orange" style="margin-top:14px;"><div class="cx-title">💡 Revenue-Cycle Lens</div><p>In billing, "I know the patient has insurance" is not enough. You must know: <strong>which type</strong> (government vs. private), <strong>which plan</strong>, <strong>what the network rules are</strong>, <strong>whether prior auth is required</strong>, and <strong>what the patient's responsibility will be</strong>. Each answer changes the workflow.</p></div>
+  </div>
+
+  <div id="gvp-s1" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:14px;">Higher-Order Thinking: Analyze &amp; Evaluate</h3>
+
+    <div class="acc">
+      <button class="acc-hdr" onclick="toggleAcc('ho1')">🤔 Why might a private PPO expose the patient to more cost than an HMO? <span class="acc-arrow">▼</span></button>
+      <div class="acc-body" id="ho1">
+        <p>PPO plans offer more provider choice — you can see any in-network provider without a referral, and even out-of-network providers (at higher cost). But this flexibility has a price: PPO premiums are generally higher, and the out-of-network benefit means patients may face higher deductibles and coinsurance when they go outside the preferred network. HMOs restrict choice but often have lower premiums and more predictable cost-sharing. From a billing perspective, PPO patients who see out-of-network providers may owe a much larger share — which must be explained before services are rendered.</p>
+        <div class="cx cx-orange" style="margin-top:10px;"><div class="cx-title">💡 Billing Implication</div><p>The billing office must tell PPO patients: "You can see this out-of-network provider, but your cost will be significantly higher." Failure to explain this creates patient disputes after the claim pays.</p></div>
+      </div>
+    </div>
+
+    <div class="acc">
+      <button class="acc-hdr" onclick="toggleAcc('ho2')">🤔 Why is it dangerous to know only the plan NAME but not the plan RULES? <span class="acc-arrow">▼</span></button>
+      <div class="acc-body" id="ho2">
+        <p>Insurance plan names can be misleading. A plan called "Blue Shield PPO Premier" might still require prior authorization for certain services. The word HMO, PPO, or even Medicare does not tell you all the rules — you must verify the specific plan's benefit structure, network requirements, and authorization rules every time. Assuming the rules based on a name is one of the most common front-end errors in billing.</p>
+        <div class="cx cx-red" style="margin-top:10px;"><div class="cx-title">🚫 Denial Risk</div><p>A service rendered without verifying the actual rules of the specific plan — just assuming based on the plan type name — is a root cause of authorization denials and network denials. Always verify the actual plan, not just the plan category.</p></div>
+      </div>
+    </div>
+
+    <div class="acc">
+      <button class="acc-hdr" onclick="toggleAcc('ho3')">🤔 Why can't billers treat Original Medicare + Medigap the same as Medicare Advantage? <span class="acc-arrow">▼</span></button>
+      <div class="acc-body" id="ho3">
+        <p>The workflows are fundamentally different. With Original Medicare + Medigap: you bill Medicare first, Medicare adjudicates, then Medigap pays the cost-sharing. With Medicare Advantage: you do NOT bill Medicare directly. You bill the private MA plan, which has its own network, prior auth rules, and fee schedule. Using the wrong workflow results in denials, delayed payment, and administrative rework. This is one of the most tested workflow confusions on the CBCS exam.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="gvp-s2" class="spanel">
+    <div id="gvp1" class="qblock">
+      <div class="qnum">Govt vs Private Q1</div>
+      <div class="qtext">A patient presents with a Medicare Advantage card. The biller submits the claim directly to Medicare (CMS). What will most likely happen?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('gvp1',0,0,'CORRECT! Medicare Advantage claims must go to the private plan — not to CMS. CMS does not process MA claims directly. The claim will be rejected or denied because it went to the wrong payer.','Clue: Medicare Advantage = private plan = do not bill CMS directly.')">A. The claim will be rejected or denied — it should go to the private MA plan</button>
+        <button class="qopt" onclick="ansQ('gvp1',1,0,'Not paid normally. CMS does not process MA claims. The claim will go to the wrong payer and be rejected.','')">B. The claim will be processed and paid normally</button>
+        <button class="qopt" onclick="ansQ('gvp1',2,0,'Not forwarded automatically. There is no automatic cross-over for MA claims. The biller must submit to the correct payer — the private MA plan.','')">C. Medicare will forward it to the correct MA plan automatically</button>
+        <button class="qopt" onclick="ansQ('gvp1',3,0,'Not billed to the patient. Insurance is still responsible — just the wrong payer was selected.','')">D. The claim will be billed to the patient</button>
+      </div>
+      <div class="rat-box" id="rat-gvp1"></div>
+    </div>
+
+    <div id="gvp2" class="qblock">
+      <div class="qnum">Govt vs Private Q2 — Evaluation</div>
+      <div class="qtext">"PPO is always better than HMO because it gives more freedom." Evaluate this statement from the billing office perspective.</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('gvp2',0,0,'CORRECT! From a billing office perspective, PPO freedom creates more complexity: out-of-network billing, higher patient balances to collect, more patient education about costs, and potential disputes when patients don\'t understand their out-of-network exposure. HMO is more predictable. Neither is universally "better" — each has tradeoffs.','Billing lens: More freedom = more billing complexity + more patient responsibility education needed.')">A. False — PPO freedom creates more billing complexity and higher patient out-of-pocket exposure</button>
+        <button class="qopt" onclick="ansQ('gvp2',1,0,'Not simply true. The statement ignores the cost implications. PPO\'s out-of-network benefit creates patient financial exposure and billing complexity that HMOs avoid.','')">B. True — PPO is always better for both patients and billing staff</button>
+        <button class="qopt" onclick="ansQ('gvp2',2,0,'Not irrelevant. The plan structure directly affects billing workflow, patient responsibility, network management, and denial risk.','')">C. The question is irrelevant to billing staff</button>
+        <button class="qopt" onclick="ansQ('gvp2',3,0,'Not that they are identical. HMO and PPO have fundamentally different network, referral, and cost-sharing structures.','')">D. HMO and PPO are the same for billing purposes</button>
+      </div>
+      <div class="rat-box" id="rat-gvp2"></div>
+    </div>
+
+    <div id="gvp3" class="qblock">
+      <div class="qnum">Govt vs Private Q3</div>
+      <div class="qtext">Why is insurance verification considered a revenue-cycle task rather than just a front-desk task?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('gvp3',0,1,'Not just about greeting. Front-desk tasks are important but this question is about revenue cycle impact.','')">A. Because front-desk staff also greet patients</button>
+        <button class="qopt" onclick="ansQ('gvp3',1,1,'CORRECT! Insurance verification errors at the front end directly cause claim denials, delayed payment, increased write-offs, and patient disputes after service. The entire revenue cycle depends on getting verification right. A mistake at step 1 causes cascade problems through every downstream process.','Revenue-cycle lens: Front-end errors = back-end denials. Verification is the first protection against claim failure.')">B. Because verification errors cause claim denials, delayed payment, and write-offs downstream</button>
+        <button class="qopt" onclick="ansQ('gvp3',2,1,'Not because Medicare requires it specifically. ALL payers require accurate billing.','')">C. Because Medicare specifically requires front-desk verification by regulation</button>
+        <button class="qopt" onclick="ansQ('gvp3',3,1,'Not because patients prefer it. The core issue is that verification protects the practice\'s revenue and prevents denials.','')">D. Because patients prefer to verify their own insurance</button>
+      </div>
+      <div class="rat-box" id="rat-gvp3"></div>
+    </div>
+
+    <button class="btn btn-blue" onclick="showTab(3);awardBadge('govtprivate')" style="margin-top:10px;">Continue → L1 Practice Studio ▶</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════ TAB 3: L1 PRACTICE STUDIO ═══════════════════════════ -->
+<div id="tab3" class="tab-panel">
+<div class="container">
+  <h2 class="sec-head">🎯 Lesson 1 Practice Studio</h2>
+  <p class="sec-sub">Application, analysis, and evaluation questions. Think like a billing professional.</p>
+
+  <div class="dir-box">
+    <h3>📌 What To Do Here</h3>
+    <ul>
+      <li>Answer all scenario questions — think carefully before clicking</li>
+      <li>Complete all three activities (Sort, What Changes, Error Spotting)</li>
+      <li>Read every rationale — the analysis is the learning</li>
+      <li><strong>Points available:</strong> Up to 150 pts</li>
+    </ul>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" onclick="showSub('ps',0)">Application Qs</button>
+    <button class="stab" onclick="showSub('ps',1)">Analysis Qs</button>
+    <button class="stab" onclick="showSub('ps',2)">Error Spotting</button>
+    <button class="stab" onclick="showSub('ps',3)">Sort & Justify</button>
+    <button class="stab" onclick="showSub('ps',4)">What Changes?</button>
+  </div>
+
+  <!-- Application -->
+  <div id="ps-s0" class="spanel active">
+    <div class="scenario"><div class="scenario-lbl">📋 Scenario</div><div class="scenario-text">A patient enrolled in an HMO wants to schedule an appointment with a dermatologist for a rash — before seeing their primary care physician.</div></div>
+
+    <div id="ps1" class="qblock">
+      <div class="qnum">Application Q1</div>
+      <div class="qtext">What must the billing/scheduling office verify BEFORE finalizing this appointment?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('ps1',0,0,'CORRECT! HMO plans require a referral from the Primary Care Physician before a specialist visit. Scheduling a specialist without a referral in an HMO = claim denial. The office must verify whether a referral exists and, if not, the patient must see the PCP first.','Key clue: HMO + specialist = referral required. No referral = denial risk.')">A. Whether a PCP referral exists — HMO plans require it for specialist visits</button>
+        <button class="qopt" onclick="ansQ('ps1',1,0,'Not just the deductible. While deductible status matters, the PRIMARY barrier here is the referral requirement. A claim submitted without a referral for an HMO specialist visit will be denied regardless of deductible status.','')">B. Only the deductible status</button>
+        <button class="qopt" onclick="ansQ('ps1',2,0,'Not that no verification is needed. HMO plans have specific referral rules. Assuming the specialist visit is automatically covered without a referral is a billing error.','')">C. Nothing — HMO plans cover all specialist visits automatically</button>
+        <button class="qopt" onclick="ansQ('ps1',3,0,'Not just the insurance card. An insurance card confirms coverage exists but does not tell you whether a referral was obtained.','')">D. Only whether the patient has an insurance card</button>
+      </div>
+      <div class="rat-box" id="rat-ps1"></div>
+    </div>
+
+    <div class="scenario" style="margin-top:16px;"><div class="scenario-lbl">📋 Scenario</div><div class="scenario-text">A PPO patient has been referred to an orthopedic specialist who is out-of-network. The patient asks: "Will my insurance cover this?"</div></div>
+
+    <div id="ps2" class="qblock">
+      <div class="qnum">Application Q2</div>
+      <div class="qtext">What financial issue must the office explain to the patient BEFORE the specialist visit?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('ps2',0,0,'CORRECT! PPO plans cover out-of-network providers, but at a significantly higher cost to the patient. The office must explain: the patient will face a higher deductible, higher coinsurance, and potentially balance billing. Without this explanation, the patient will be surprised by a much larger bill.','Billing lens: PPO out-of-network = covered, but patient pays MORE. Always explain before service.')">A. That out-of-network services cost the patient significantly more — higher cost-sharing will apply</button>
+        <button class="qopt" onclick="ansQ('ps2',1,0,'Not that the claim will be denied. PPO plans DO cover out-of-network providers — but at higher patient cost.','')">B. That the PPO will not cover out-of-network services at all</button>
+        <button class="qopt" onclick="ansQ('ps2',2,0,'Not that cost is the same. Out-of-network services in a PPO have higher cost-sharing.','')">C. That the patient\'s cost will be the same as an in-network visit</button>
+        <button class="qopt" onclick="ansQ('ps2',3,0,'Not to do nothing. The office has a responsibility to inform the patient of their financial exposure before services are rendered.','')">D. Nothing — the patient chose the specialist and accepts responsibility</button>
+      </div>
+      <div class="rat-box" id="rat-ps2"></div>
+    </div>
+
+    <div class="scenario" style="margin-top:16px;"><div class="scenario-lbl">📋 Scenario</div><div class="scenario-text">A patient says, "I have Medicare AND a supplemental plan." The biller wants to determine the patient's out-of-pocket balance.</div></div>
+
+    <div id="ps3" class="qblock">
+      <div class="qnum">Application Q3</div>
+      <div class="qtext">What must the biller verify FIRST to determine the patient's balance?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('ps3',0,0,'CORRECT! There are two possibilities: (1) Original Medicare + Medigap supplement — the supplement may cover the 20% coinsurance, leaving little or no patient balance. (2) Medicare Advantage + supplemental — an entirely different plan with its own cost-sharing. The biller MUST identify which type of Medicare and what the supplemental plan actually covers before calculating any patient balance.','Key: Medicare + supplement could mean Medigap OR MA + supplement. They work completely differently.')">A. Whether the supplement is Medigap (with Original Medicare) or a separate plan with Medicare Advantage — they work differently</button>
+        <button class="qopt" onclick="ansQ('ps3',1,0,'Not to charge the standard 20%. If the patient has Medigap, the supplement may cover the 20% — the patient owes nothing. Assuming 20% without verifying the supplement is a billing error.','')">B. Charge the patient 20% coinsurance without investigating the supplement</button>
+        <button class="qopt" onclick="ansQ('ps3',2,0,'Not to bill the patient only. The supplement must be billed before determining patient balance.','')">C. Bill only the patient since supplements rarely pay</button>
+        <button class="qopt" onclick="ansQ('ps3',3,0,'Not to call Medicare only. The issue is understanding the supplemental plan\'s coverage.','')">D. Call Medicare directly to confirm the supplement</button>
+      </div>
+      <div class="rat-box" id="rat-ps3"></div>
+    </div>
+  </div>
+
+  <!-- Analysis -->
+  <div id="ps-s1" class="spanel">
+    <div id="ps4" class="qblock">
+      <div class="qnum">Analysis Q1</div>
+      <div class="qtext">Why is POS (Point-of-Service) commonly confused with PPO, and what is the MOST operationally important difference for billing staff?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('ps4',0,0,'CORRECT! POS allows out-of-network access like a PPO — but unlike PPO, POS usually requires a PCP and referral for in-network specialist care (like an HMO). The critical billing difference: a POS patient seeing a specialist without a PCP referral may face denial for in-network services, even though they have the flexibility of seeing out-of-network providers.','Operational difference: POS = referral required for in-network specialists. PPO = no referral required at all.')">A. Both allow out-of-network access, but POS requires PCP referrals for in-network specialists — a critical authorization difference</button>
+        <button class="qopt" onclick="ansQ('ps4',1,0,'Not that they are identical. POS and PPO have different referral requirements. This is the core operational distinction.','')">B. POS and PPO are functionally identical — the difference is only in name</button>
+        <button class="qopt" onclick="ansQ('ps4',2,0,'Not that POS covers no out-of-network services. POS DOES allow out-of-network access at higher cost.','')">C. POS does not cover out-of-network services at all</button>
+        <button class="qopt" onclick="ansQ('ps4',3,0,'Not about the premium difference. The operationally important billing difference is the referral requirement.','')">D. POS always has lower premiums than PPO</button>
+      </div>
+      <div class="rat-box" id="rat-ps4"></div>
+    </div>
+
+    <div id="ps5" class="qblock">
+      <div class="qnum">Analysis Q2</div>
+      <div class="qtext">How does plan structure affect DENIAL RISK before coding even begins?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('ps5',0,1,'Not just about the codes. Coding errors cause denials, but plan structure creates denial risk even when codes are perfect.','')">A. Plan structure has no effect on denial risk — only coding errors cause denials</button>
+        <button class="qopt" onclick="ansQ('ps5',1,1,'CORRECT! Plan structure determines: whether a referral is needed, whether prior authorization is required, whether the provider is in-network, and what the patient\'s cost-sharing will be. A perfectly coded claim submitted without a required referral or auth — because the biller didn\'t know the plan rules — is a front-end denial.','Revenue-cycle lens: Know the plan structure before the patient even arrives — it determines whether the claim will be payable.')">B. Plan structure determines referral, authorization, and network requirements — missing any of them causes denial before coding matters</button>
+        <button class="qopt" onclick="ansQ('ps5',2,1,'Not only for government plans. All plan types have structure rules that affect denial risk.','')">C. Plan structure only affects government insurance denials</button>
+        <button class="qopt" onclick="ansQ('ps5',3,1,'Not only the deductible. Plan structure affects whether the claim gets paid at all.','')">D. Plan structure only affects the deductible amount</button>
+      </div>
+      <div class="rat-box" id="rat-ps5"></div>
+    </div>
+  </div>
+
+  <!-- Error Spotting -->
+  <div id="ps-s2" class="spanel">
+    <h3 style="color:var(--red);margin-bottom:14px;">🔍 Error Spotting — Find &amp; Fix the Mistake</h3>
+    <p style="font-size:.83rem;color:#455A64;margin-bottom:16px;">Each statement below contains an error. Click the BEST correction.</p>
+
+    <div id="err1" class="qblock" style="border-left-color:var(--red-m);">
+      <div class="qnum">Error Spotting 1</div>
+      <div class="qtext">❌ Student says: <em>"Part C is a supplement that fills in what Medicare doesn't cover."</em> — What is wrong?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('err1',0,0,'CORRECT! Part C (Medicare Advantage) is not a supplement — it REPLACES Original Medicare. Medigap = supplement to Original Medicare. Part C = private plan ALTERNATIVE to Original Medicare.','Common exam trap: Part C ≠ supplement. Part C replaces. Medigap supplements.')">A. Part C REPLACES Original Medicare through a private plan — Medigap is the supplement that fills gaps</button>
+        <button class="qopt" onclick="ansQ('err1',1,0,'Not that Part C is a government supplement. The error in the statement is calling it a supplement.','')">B. Part C is correct — it is a government supplement</button>
+        <button class="qopt" onclick="ansQ('err1',2,0,'Not that Part C covers only drugs. Part D covers drugs. The error is calling Part C a supplement.','')">C. Part C only covers prescription drugs</button>
+        <button class="qopt" onclick="ansQ('err1',3,0,'Not that the statement is correct. Part C is not a supplement — it replaces Original Medicare.','')">D. The statement is correct</button>
+      </div>
+      <div class="rat-box" id="rat-err1"></div>
+    </div>
+
+    <div id="err2" class="qblock" style="border-left-color:var(--red-m);">
+      <div class="qnum">Error Spotting 2</div>
+      <div class="qtext">❌ Student says: <em>"Medicaid and Medicare are basically the same — they're both government health insurance for people who need help."</em> — What is wrong?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('err2',0,0,'CORRECT! They are fundamentally different. Medicare = federal only, age/disability-based, NOT income-based. Medicaid = federal+state joint program, income-based, and Medicaid is the payer of last resort. Treating them the same in billing leads to wrong payer orders, wrong workflow, and denials.','Critical distinction: Medicare = federal, age/disability. Medicaid = state-administered, income-based, payer of last resort.')">A. Medicare is federal and age/disability-based (not income-based); Medicaid is state-administered, income-based, and the payer of last resort — they require different billing workflows</button>
+        <button class="qopt" onclick="ansQ('err2',1,0,'Not that they are the same. The statement is wrong. They differ in eligibility basis, administration, billing order, and rules.','')">B. The statement is correct — they are the same</button>
+        <button class="qopt" onclick="ansQ('err2',2,0,'Not that they are both income-based. Medicare is NOT income-based. Medicaid IS.','')">C. Both programs are income-based — the student is right about that</button>
+        <button class="qopt" onclick="ansQ('err2',3,0,'Not that only Medicare is real. Both programs exist. The error is treating them as equivalent.','')">D. Only Medicare is a real insurance program</button>
+      </div>
+      <div class="rat-box" id="rat-err2"></div>
+    </div>
+
+    <div id="err3" class="qblock" style="border-left-color:var(--red-m);">
+      <div class="qnum">Error Spotting 3</div>
+      <div class="qtext">❌ Student says: <em>"PPO means no patient responsibility — the insurance covers everything."</em> — What is wrong?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('err3',0,0,'CORRECT! PPO (or any plan type) does not eliminate patient financial responsibility. PPO patients still owe premiums, deductibles, copays, and coinsurance. Going out-of-network in a PPO INCREASES patient responsibility. "No referral needed" ≠ "no patient cost."','Trap: Plan type ≠ zero patient responsibility. All plans have cost-sharing.')">A. PPO patients still owe deductibles, copays, and coinsurance — and pay MORE out-of-network</button>
+        <button class="qopt" onclick="ansQ('err3',1,0,'Not correct. PPO has cost-sharing. The student confused "no referral required" with "no cost."','')">B. The statement is correct — PPO covers 100%</button>
+        <button class="qopt" onclick="ansQ('err3',2,0,'Not just about referrals. The error is about cost-sharing, not referrals.','')">C. PPO is wrong only because it requires referrals</button>
+        <button class="qopt" onclick="ansQ('err3',3,0,'Not that the patient never pays. All insurance plans have patient cost-sharing.','')">D. The patient never has to pay with any insurance</button>
+      </div>
+      <div class="rat-box" id="rat-err3"></div>
+    </div>
+
+    <div id="err4" class="qblock" style="border-left-color:var(--red-m);">
+      <div class="qnum">Error Spotting 4</div>
+      <div class="qtext">❌ Student says: <em>"If the patient has insurance, network does not matter."</em> — What is wrong?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('err4',0,0,'CORRECT! Network status is critical. For HMO and EPO plans, out-of-network care may result in ZERO insurance payment — leaving the patient responsible for the full bill. For PPO, out-of-network care results in significantly higher patient cost-sharing. Network always matters.','Key: HMO out-of-network = potential full denial. PPO out-of-network = much higher patient cost.')">A. Network is critical — HMO patients who go out-of-network may get zero insurance payment; all patients pay more out-of-network</button>
+        <button class="qopt" onclick="ansQ('err4',1,0,'Not that the statement is correct. Network status is always relevant in determining coverage, cost-sharing, and claim payability.','')">B. The statement is correct — insurance always pays regardless of network</button>
+        <button class="qopt" onclick="ansQ('err4',2,0,'Not just for Medicare. Network rules apply to all private plans and many Medicare Advantage plans.','')">C. Network only matters for Medicare patients</button>
+        <button class="qopt" onclick="ansQ('err4',3,0,'Not only about the deductible. Network status affects whether coverage applies at all.','')">D. Network only affects the deductible amount</button>
+      </div>
+      <div class="rat-box" id="rat-err4"></div>
+    </div>
+  </div>
+
+  <!-- Sort & Justify -->
+  <div id="ps-s3" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:12px;">🗂️ Sort &amp; Justify Activity</h3>
+    <p style="font-size:.83rem;color:#455A64;margin-bottom:14px;">Tap a plan/program, then tap the correct category box to place it. Sort all items correctly.</p>
+
+    <div class="sort-pool" id="sort-pool">
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="government">Medicare Part A</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="commercial">PPO</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="government">Medicaid</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="supplemental">Medigap</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="managed-care">HMO</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="prescription">Medicare Part D</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="government">TRICARE</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="managed-care">POS</div>
+      <div class="sort-chip" onclick="selectSort(this)" data-answer="commercial">Medicare Advantage (Part C)</div>
+    </div>
+
+    <div class="two-col" style="margin-top:14px;">
+      <div>
+        <div class="sort-zone-lbl" style="color:var(--blue);">🏛️ Government Insurance</div>
+        <div class="sort-zone" id="zone-government" onclick="dropSort(this,'government')"><em style="font-size:.72rem;color:#aaa;">Tap to place selected item</em></div>
+      </div>
+      <div>
+        <div class="sort-zone-lbl" style="color:var(--green);">💼 Commercial / Private</div>
+        <div class="sort-zone" id="zone-commercial" onclick="dropSort(this,'commercial')"><em style="font-size:.72rem;color:#aaa;">Tap to place selected item</em></div>
+      </div>
+      <div>
+        <div class="sort-zone-lbl" style="color:var(--purple-m);">➕ Supplemental</div>
+        <div class="sort-zone" id="zone-supplemental" onclick="dropSort(this,'supplemental')"><em style="font-size:.72rem;color:#aaa;">Tap to place selected item</em></div>
+      </div>
+      <div>
+        <div class="sort-zone-lbl" style="color:var(--teal);">🔄 Managed Care</div>
+        <div class="sort-zone" id="zone-managed-care" onclick="dropSort(this,'managed-care')"><em style="font-size:.72rem;color:#aaa;">Tap to place selected item</em></div>
+      </div>
+      <div>
+        <div class="sort-zone-lbl" style="color:var(--orange);">💊 Prescription-Focused</div>
+        <div class="sort-zone" id="zone-prescription" onclick="dropSort(this,'prescription')"><em style="font-size:.72rem;color:#aaa;">Tap to place selected item</em></div>
+      </div>
+    </div>
+    <button class="btn btn-blue btn-sm" style="margin-top:12px;" onclick="checkSort()">✓ Check Answers</button>
+    <div id="sort-result" style="margin-top:10px;font-size:.82rem;font-weight:600;"></div>
+  </div>
+
+  <!-- What Changes -->
+  <div id="ps-s4" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:12px;">🔄 What Changes? Simulation</h3>
+    <div class="scenario"><div class="scenario-lbl">📋 Base Clinical Situation</div><div class="scenario-text">A 45-year-old patient needs to see a cardiologist. The service is scheduled. Now — what changes when you change ONLY the plan?</div></div>
+
+    <div id="wc1" class="qblock">
+      <div class="qnum">What Changes? — HMO Plan</div>
+      <div class="qtext">The patient has an HMO. Which of the following is MOST critical to verify before the cardiologist visit?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('wc1',0,0,'CORRECT! HMO plans require a PCP referral to see a specialist. Without it, the claim will be denied. Prior authorization may also be needed. Network status is also critical — the cardiologist must be in-network.','HMO = referral required + in-network only + possible prior auth.')">A. Referral from PCP, prior authorization (if required), and in-network status</button>
+        <button class="qopt" onclick="ansQ('wc1',1,0,'Not nothing. HMO is the most restrictive plan — referrals and network compliance are critical.','')">B. Nothing — HMOs cover all specialist visits automatically</button>
+        <button class="qopt" onclick="ansQ('wc1',2,0,'Not just the deductible. The primary pre-service verification for an HMO specialist visit is the referral and authorization.','')">C. Only the deductible status</button>
+        <button class="qopt" onclick="ansQ('wc1',3,0,'Not just the patient\'s copay. The denial risk in an HMO comes from missing the referral.','')">D. The patient\'s copay amount</button>
+      </div>
+      <div class="rat-box" id="rat-wc1"></div>
+    </div>
+
+    <div id="wc2" class="qblock">
+      <div class="qnum">What Changes? — PPO Plan</div>
+      <div class="qtext">Now the patient has a PPO. What changes compared to the HMO scenario?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('wc2',0,0,'CORRECT! With a PPO, the referral requirement disappears — the patient can self-refer to the cardiologist. However, the office should still verify in-network status (to advise on cost-sharing), confirm benefits, and check if prior authorization is required by this specific plan.','PPO: no referral needed, but still verify benefits, network, and auth requirements.')">A. No referral required, but the office should still verify network status, benefits, and auth requirements</button>
+        <button class="qopt" onclick="ansQ('wc2',1,0,'Not that nothing changes. Plan type changes workflow significantly. PPO removes the referral barrier but still requires benefit verification.','')">B. Nothing changes — all plans work the same for specialists</button>
+        <button class="qopt" onclick="ansQ('wc2',2,0,'Not that the patient pays 100%. PPO covers specialists — in-network and out-of-network.','')">C. The patient must pay 100% because PPO doesn\'t cover specialists</button>
+        <button class="qopt" onclick="ansQ('wc2',3,0,'Not that PPO requires more referrals. PPO is the LEAST restrictive plan type for referrals — no referral needed.','')">D. PPO requires even more referrals than HMO</button>
+      </div>
+      <div class="rat-box" id="rat-wc2"></div>
+    </div>
+
+    <button class="btn btn-blue" onclick="showTab(4);awardBadge('practice1')" style="margin-top:10px;">Continue → Eligibility ▶</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════ TAB 4: ELIGIBILITY ═══════════════════════════ -->
+<div id="tab4" class="tab-panel">
+<div class="container">
+  <h2 class="sec-head">✅ Lesson 2: Eligibility &amp; Benefits Verification</h2>
+  <p class="sec-sub">Before a service happens, the office must verify eligibility and benefits. This workflow protects revenue and prevents denials.</p>
+
+  <div class="dir-box">
+    <h3>📌 What To Do Here</h3>
+    <ul>
+      <li>Click each workflow step to expand its explanation</li>
+      <li>Read the special situations cards carefully</li>
+      <li>Answer all concept-check questions</li>
+      <li><strong>Points available:</strong> Up to 80 pts</li>
+    </ul>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" onclick="showSub('elig',0)">Verification Workflow</button>
+    <button class="stab" onclick="showSub('elig',1)">Documentation Required</button>
+    <button class="stab" onclick="showSub('elig',2)">Special Situations</button>
+    <button class="stab" onclick="showSub('elig',3)">Concept Checks</button>
+  </div>
+
+  <div id="elig-s0" class="spanel active">
+    <h3 style="color:var(--blue);margin-bottom:12px;">Step-by-Step Verification Workflow</h3>
+    <p style="font-size:.82rem;color:#455A64;margin-bottom:14px;">Tap each step to see what the office must do and why it matters.</p>
+
+    <div class="workflow">
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">1</div>
+        <div class="wf-title">Collect Insurance Info</div>
+        <div class="wf-desc">Get insurance card, member ID, group number</div>
+        <div class="wf-expand"><p>Collect the insurance card (both sides), member ID number, group number, payer name, and policyholder information. Verify the patient is the member OR a covered dependent. Missing any of these makes verification impossible.</p></div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">2</div>
+        <div class="wf-title">Verify Eligibility</div>
+        <div class="wf-desc">Confirm active coverage for DOS</div>
+        <div class="wf-expand"><p>Contact the payer (online portal, phone, or clearinghouse) to confirm the patient has active coverage on the DATE OF SERVICE. A card in hand ≠ active coverage. Policies can lapse, change, or terminate. Medicaid eligibility changes monthly.</p></div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">3</div>
+        <div class="wf-title">Verify Benefits</div>
+        <div class="wf-desc">Determine what IS and IS NOT covered</div>
+        <div class="wf-expand"><p>Eligibility ≠ Benefits. A patient can be eligible but the specific service may not be covered. Verify: Is this service covered? What are the in-network vs. out-of-network benefit levels? What is the deductible? Has it been met? What is the copay/coinsurance? Are there visit limits? Is prior auth needed?</p></div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">4</div>
+        <div class="wf-title">Check Network Status</div>
+        <div class="wf-desc">Is the provider in-network?</div>
+        <div class="wf-expand"><p>Determine whether the rendering provider and the facility are in-network for THIS patient's plan. A provider can be in-network for one plan and out-of-network for another, even from the same insurer. Always verify network status for the specific plan.</p></div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">5</div>
+        <div class="wf-title">Determine Auth Needed</div>
+        <div class="wf-desc">Does this service require prior auth?</div>
+        <div class="wf-expand"><p>Based on the plan rules and the service being requested, determine if prior authorization is required. If yes, obtain it BEFORE the service. A claim for a service that required auth but didn't have it will be denied — even if everything else was done correctly.</p></div>
+      </div>
+      <div class="wf-arrow">→</div>
+      <div class="wf-step" onclick="this.classList.toggle('expanded')">
+        <div class="wf-num">6</div>
+        <div class="wf-title">Estimate Patient $</div>
+        <div class="wf-desc">What will the patient owe?</div>
+        <div class="wf-expand"><p>Based on verified benefits, calculate or estimate the patient's responsibility: deductible remaining + copay/coinsurance. Inform the patient BEFORE service — this reduces patient disputes, increases upfront collections, and improves patient satisfaction.</p></div>
+      </div>
+    </div>
+    <div class="cx cx-orange"><div class="cx-title">💡 Revenue-Cycle Lens</div><p>Every step in this workflow prevents a problem downstream. Skipping step 3 (benefits) means you may render a non-covered service. Skipping step 5 (auth) means a probable denial. Skipping step 6 (patient $) means disputes and bad debt. The front end is the most powerful point in the revenue cycle.</p></div>
+  </div>
+
+  <div id="elig-s1" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:12px;">Required Documentation</h3>
+    <div class="card-grid">
+      <div class="card card-blue"><h3>Insurance Card</h3><p>Front AND back. Contains: Payer name, member ID, group number, plan type, copay amounts, payer phone, and claims address.</p></div>
+      <div class="card card-green"><h3>Photo ID</h3><p>Government-issued ID to verify the patient's identity and match it to the insurance card.</p></div>
+      <div class="card card-yellow"><h3>Payer Verification</h3><p>Phone call, online portal, or clearinghouse real-time eligibility check. A card is NOT sufficient — must confirm active coverage for the date of service.</p></div>
+      <div class="card card-red"><h3>Secondary Insurance</h3><p>If the patient has secondary coverage, collect that card too. Coordination of benefits affects billing order and patient balance.</p></div>
+    </div>
+    <div class="cx cx-yellow"><div class="cx-title">⚠️ Eligibility ≠ Benefits</div><p>A patient can be <em>eligible</em> (active member) but the specific service may not be <em>covered</em> under their benefits. Always verify both separately. Eligibility tells you the policy is active. Benefits tell you what the policy will pay for.</p></div>
+  </div>
+
+  <div id="elig-s2" class="spanel">
+    <h3 style="color:var(--blue);margin-bottom:12px;">Special Situations</h3>
+    <div class="card-grid">
+      <div class="card card-yellow"><h3>⚠️ Self-Pay</h3><p>Patient has no insurance OR chooses not to use insurance. Verify: Is there truly no coverage? Offer financial counseling. Collect payment arrangement upfront. Self-pay rates may differ from insurance rates.</p></div>
+      <div class="card card-red"><h3>🚫 Uninsured</h3><p>No active coverage. Determine: Does the patient qualify for any government program (Medicaid, CHIP)? Is charity care applicable? Document uninsured status for compliance.</p></div>
+      <div class="card card-blue"><h3>⏳ Not Yet Verified</h3><p>Insurance presented but not yet confirmed active. Do NOT render non-emergency services until verification is complete. Hold the appointment or verify first.</p></div>
+      <div class="card card-purple"><h3>🌐 Out-of-Network</h3><p>Provider or facility is not in the patient's network. Must advise the patient of their out-of-network cost exposure BEFORE the service. For HMO patients, this may mean NO coverage (except emergencies).</p></div>
+    </div>
+  </div>
+
+  <div id="elig-s3" class="spanel">
+    <div id="el1" class="qblock">
+      <div class="qnum">Eligibility Q1</div>
+      <div class="qtext">A patient presents an insurance card, but the office cannot confirm active coverage before the appointment. What is the BEST course of action for a non-emergency service?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('el1',0,1,'Not proceed anyway. A card does not guarantee active coverage. Rendering service before confirming eligibility creates risk of a denied claim.','')">A. Proceed — the insurance card proves coverage</button>
+        <button class="qopt" onclick="ansQ('el1',1,1,'CORRECT! For non-emergency services, the office should complete eligibility verification before proceeding. If verification cannot be completed in time, reschedule or collect a deposit. A card alone is not sufficient confirmation of active coverage.','Eligibility must be verified — a card is not confirmation of active coverage.')">B. Hold the appointment until eligibility is confirmed, or collect a deposit</button>
+        <button class="qopt" onclick="ansQ('el1',2,1,'Not bill the patient in full immediately. Best practice is to attempt verification first before assuming self-pay status.','')">C. Bill the patient in full without attempting verification</button>
+        <button class="qopt" onclick="ansQ('el1',3,1,'Not ignore it. Insurance verification is a required front-end step for every patient encounter.','')">D. Ignore the issue — it will resolve after billing</button>
+      </div>
+      <div class="rat-box" id="rat-el1"></div>
+    </div>
+
+    <div id="el2" class="qblock">
+      <div class="qnum">Eligibility Q2</div>
+      <div class="qtext">The verification team confirms a patient is "eligible." Is this sufficient to know the service will be covered?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('el2',0,1,'Not sufficient. Eligibility only means the policy is active. Benefits must also be verified to know what the policy covers.','Eligibility ≠ benefits. Always verify both.')">A. Yes — if the patient is eligible, all services will be covered</button>
+        <button class="qopt" onclick="ansQ('el2',1,1,'CORRECT! Eligibility and benefits are two separate verifications. Eligibility confirms the policy is active. Benefits confirm what the policy covers, cost-sharing, visit limits, and authorization requirements.','Eligibility = active coverage. Benefits = what is covered and at what cost-sharing. Both are required.')">B. No — eligibility only confirms active coverage; benefits must be verified separately to confirm service coverage</button>
+        <button class="qopt" onclick="ansQ('el2',2,1,'Not that eligibility is irrelevant. Both steps are required. Eligibility comes first, then benefits.','')">C. Eligibility is irrelevant — only benefits matter</button>
+        <button class="qopt" onclick="ansQ('el2',3,1,'Not once per year. Medicaid eligibility changes monthly. Even commercial plans can change mid-year.','')">D. Eligibility only needs to be verified once per year</button>
+      </div>
+      <div class="rat-box" id="rat-el2"></div>
+    </div>
+
+    <button class="btn btn-blue" onclick="showTab(5);awardBadge('eligibility')" style="margin-top:10px;">Continue → Auth &amp; Referrals ▶</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════ TAB 5: AUTH & REFERRALS ═══════════════════════════ -->
+<div id="tab5" class="tab-panel">
+<div class="container">
+  <h2 class="sec-head">📋 Lesson 2: Referrals, Authorizations &amp; Predeterminations</h2>
+  <p class="sec-sub">These four concepts are distinct — and confusing them causes denials. Master the differences here.</p>
+
+  <div class="dir-box">
+    <h3>📌 What To Do Here</h3>
+    <ul>
+      <li>Read each definition and the comparison cards</li>
+      <li>Complete the workflow simulation</li>
+      <li>Answer all concept-check questions</li>
+      <li><strong>Points available:</strong> Up to 80 pts</li>
+    </ul>
+  </div>
+
+  <div class="stabs">
+    <button class="stab active" onclick="showSub('auth',0)">The Four Concepts</button>
+    <button class="stab" onclick="showSub('auth',1)">Compare &amp; Contrast</button>
+    <button class="stab" onclick="showSub('auth',2)">Concept Checks</button>
+  </div>
+
+  <div id="auth-s0" class="spanel active">
+    <div class="card-grid">
+      <div class="card card-blue">
+        <h3>📤 Referral</h3>
+        <p>A recommendation from a PCP to another provider (specialist) for evaluation or treatment. Required by HMO and some POS plans before specialist visits. <strong>FROM the physician. TO the specialist.</strong></p><br>
+        <p class="tag tag-red">Denial risk: Specialist claim without referral in HMO = denial</p>
+      </div>
+      <div class="card card-green">
+        <h3>🔒 Preauthorization / Precertification</h3>
+        <p>Advance approval from the insurance company that a specific service is medically necessary and will be covered. Obtained BEFORE the service. <strong>FROM the insurance company.</strong></p><br>
+        <p class="tag tag-red">Denial risk: Service rendered without required prior auth = denial</p>
+      </div>
+      <div class="card card-yellow">
+        <h3>✅ Authorization</h3>
+        <p>Formal approval number from the insurance company confirming a service has been authorized. Received AFTER requesting preauthorization. <strong>Always document the authorization number.</strong></p><br>
+        <p class="tag tag-yellow">Best practice: Record auth number in the patient chart and claim</p>
+      </div>
+      <div class="card card-purple">
+        <h3>📊 Predetermination</h3>
+        <p>A request to the payer to determine how much it will pay for a specific service — BEFORE the service is performed. Unlike preauthorization, it does NOT guarantee payment. Used to estimate patient responsibility for expensive procedures.</p><br>
+        <p class="tag tag-purple">Note: Predetermination ≠ preauthorization. Does not guarantee coverage.</p>
+      </div>
+    </div>
+
+    <div class="cx cx-red"><div class="cx-title">🚫 Critical Distinctions</div>
+      <p>• <strong>Referral</strong> = physician-to-physician recommendation (required for HMO specialists)<br>
+      • <strong>Preauthorization</strong> = insurer approval BEFORE service (required for many procedures)<br>
+      • <strong>Authorization</strong> = the approval number received after preauth request<br>
+      • <strong>Predetermination</strong> = cost estimate only — NOT approval. Does not guarantee coverage.</p>
+    </div>
+  </div>
+
+  <div id="auth-s1" class="spanel">
+    <div style="overflow-x:auto;">
+    <table class="tbl">
+      <thead><tr><th>Concept</th><th>Who Initiates</th><th>From Whom</th><th>Guarantees Payment?</th><th>When Required</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referral</strong></td><td>Office/Physician</td><td>PCP → Specialist</td><td class="t-n">No (but required)</td><td>HMO/some POS specialist visits</td></tr>
+        <tr><td><strong>Preauthorization</strong></td><td>Office</td><td>Insurance company</td><td class="t-v">If approved + conditions met</td><td>Services on payer's auth list</td></tr>
+        <tr><td><strong>Authorization #</strong></td><td>Insurer provides</td><td>Insurance company</td><td class="t-v">Conditional on billing correctly</td><td>Record on claim when required</td></tr>
+        <tr><td><strong>Predetermination</strong></td><td>Office</td><td>Insurance company</td><td class="t-n">NO — estimate only</td><td>Complex/expensive procedures for cost estimation</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="cx cx-orange" style="margin-top:14px;"><div class="cx-title">💡 Revenue-Cycle Lens</div><p>Prior authorization is the single most important pre-service task for preventing denials on high-cost procedures. The process: identify if the service requires auth → submit clinical documentation → receive authorization number → document it → render service → include auth number on the claim. Missing any step = potential denial.</p></div>
+  </div>
+
+  <div id="auth-s2" class="spanel">
+    <div id="au1" class="qblock">
+      <div class="qnum">Auth &amp; Referrals Q1</div>
+      <div class="qtext">A claim is denied: "Service requires preauthorization — authorization not on file." What happened, and what is the FIRST step to resolve it?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('au1',0,0,'CORRECT! The preauthorization was not obtained before the service was rendered. Resolution: appeal the denial with clinical documentation supporting medical necessity, and request a retroactive authorization if the payer allows it. If not, the claim may be unrecoverable — making pre-service auth verification critical.','Key: No auth = denial. Resolution: appeal + retroactive auth request + prevent next time.')">A. Preauthorization was not obtained before service — appeal with clinical documentation and request retroactive auth</button>
+        <button class="qopt" onclick="ansQ('au1',1,0,'Not to recode. The denial is about missing authorization, not a coding error.','')">B. Recode the claim with a different procedure code</button>
+        <button class="qopt" onclick="ansQ('au1',2,0,'Not to ignore it. An auth denial is recoverable through appeal with documentation — but it must be acted upon.','')">C. Ignore the denial — it will be paid on the next submission</button>
+        <button class="qopt" onclick="ansQ('au1',3,0,'Not to bill the patient immediately. Billing the patient before exhausting appeal options is premature.','')">D. Immediately bill the patient the full amount</button>
+      </div>
+      <div class="rat-box" id="rat-au1"></div>
+    </div>
+
+    <div id="au2" class="qblock">
+      <div class="qnum">Auth &amp; Referrals Q2</div>
+      <div class="qtext">A patient's provider submits a predetermination to the insurance company for a procedure. The insurer responds: "Predetermination accepted — estimated benefit $800." Does this GUARANTEE the patient will receive $800 toward the procedure?</div>
+      <div class="qopts">
+        <button class="qopt" onclick="ansQ('au2',0,1,'Not guaranteed. A predetermination is an ESTIMATE of benefits — not a guarantee of payment. Benefits can change between the predetermination response and the date of service.','Predetermination = estimate. NOT a guarantee of coverage or payment.')">A. Yes — the predetermination is a guarantee of $800 payment</button>
+        <button class="qopt" onclick="ansQ('au2',1,1,'CORRECT! A predetermination is an ESTIMATE of expected benefits — it is not a guarantee of payment. Actual payment depends on the patient\'s eligibility at the time of service and whether the benefit structure has changed. Patients must understand this so they are not misled.','Predetermination = estimate only. Not a guarantee. Actual payment may differ.')">B. No — a predetermination is an estimate of benefits, not a payment guarantee</button>
+        <button class="qopt" onclick="ansQ('au2',2,1,'Not that predetermination equals authorization. These are different concepts. A predetermination estimates cost; a preauthorization approves the service.','')">C. Yes — a predetermination is the same as a preauthorization</button>
+        <button class="qopt" onclick="ansQ('au2',3,1,'Not that the payer always pays more. The key point is it\'s an estimate, not a guarantee.','')">D. Yes — payers always pay more than the predetermination amount</button>
+      </div>
+      <div class="rat-box" id="rat-au2"></div>
+    </div>
+
+    <!-- PART 2 TRANSITION -->
+    <div class="part2-banner" style="margin-top:24px;">
+      <h3>🎉 Part 1 Complete!</h3>
+      <p>You've covered Government Insurance, Govt vs. Private, the L1 Practice Studio, Eligibility, and Auth &amp; Referrals. Open <strong>Part 2</strong> to continue with COB &amp; the Birthday Rule, Patient Financial Responsibility, Denial Prevention Lab, Mixed Practice Arena, Timed Challenge, and Rapid Review.</p>
+      <button class="btn btn-blue btn-lg" onclick="awardBadge('auth');showNotif('🏅 Auth Badge earned! Open Part 2 to continue.')">✅ Mark Part 1 Done &amp; Collect Auth Badge</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <strong>CBCS Insurance Verification &amp; Government Payer Interactive Mastery Lab — Part 1 of 2</strong><br>
+  Tabs covered: Welcome · Govt Insurance · Govt vs Private · L1 Practice Studio · Eligibility · Auth &amp; Referrals<br>
+  Designed and Curriculum Developed by <strong>Hilary Homaii</strong>
+</footer>
+
+<script>
+// ─── GLOBALS ───
+let gScore=0,gAnswered=0,gCorrect=0;
+let badges=[];
+let sortSelected=null;
+
+// ─── TAB NAVIGATION ───
+function showTab(n){
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.ntab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  window.scrollTo(0,0);
+}
+
+// ─── SUB-TAB NAVIGATION ───
+function showSub(prefix,n){
+  const panels=document.querySelectorAll(`[id^="${prefix}-s"]`);
+  panels.forEach((p,i)=>p.classList.toggle('active',i===n));
+  const activeTabPanel=document.querySelector('.tab-panel.active');
+  if(activeTabPanel){
+    const activeTabs=activeTabPanel.querySelectorAll('.stab');
+    activeTabs.forEach((t,i)=>t.classList.toggle('active',i===n));
+  }
+}
+
+// ─── ACCORDION ───
+function toggleAcc(id){
+  const body=document.getElementById(id);
+  const hdr=body.previousElementSibling;
+  const isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  hdr.classList.toggle('open',!isOpen);
+}
+
+// ─── NOTIFICATION ───
+function showNotif(msg){
+  const n=document.getElementById('notif');
+  n.textContent=msg;
+  n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),2800);
+}
+
+// ─── UPDATE GLOBAL STATS ───
+function updateStats(){
+  document.getElementById('gScore').textContent=gScore;
+  document.getElementById('gAnswered').textContent=gAnswered;
+  document.getElementById('gAcc').textContent=gAnswered>0?Math.round(gCorrect/gAnswered*100)+'%':'—';
+  document.getElementById('gBadges').textContent=badges.length;
+}
+
+// ─── ANSWER QUESTION ───
+function ansQ(blockId,choiceIdx,correctIdx,rationale,clue){
+  const block=document.getElementById(blockId);
+  if(block.dataset.answered) return;
+  block.dataset.answered='1';
+  const opts=block.querySelectorAll('.qopt');
+  const ratBox=document.getElementById('rat-'+blockId);
+  const isCorrect=(choiceIdx===correctIdx);
+  opts.forEach((o,i)=>{
+    o.disabled=true;
+    if(i===correctIdx) o.classList.add('correct');
+    else if(i===choiceIdx&&!isCorrect) o.classList.add('wrong');
+  });
+  gAnswered++;
+  if(isCorrect){gScore+=10;gCorrect++;showNotif('+10 pts! ✓');}
+  else{showNotif('Review the rationale below ↓');}
+  updateStats();
+  if(ratBox&&(rationale||isCorrect)){
+    ratBox.classList.add('show');
+    const msg=rationale||'Correct! Keep going.';
+    ratBox.innerHTML=`<div class="rat-title">${isCorrect?'✅ Correct!':'📖 Here\'s Why...'}</div><div class="rat-text">${msg}</div>`+
+      (clue?`<div class="rat-clue"><div class="rat-clue-lbl">💡 Key Clue</div><div style="font-size:.78rem;color:#37474F;">${clue}</div></div>`:'');
+  }
+}
+
+// ─── BADGE ───
+function awardBadge(name){
+  if(!badges.includes(name)){
+    badges.push(name);
+    updateStats();
+    showNotif('🏅 Badge earned!');
+  }
+}
+
+// ─── SORT ACTIVITY ───
+function selectSort(el){
+  document.querySelectorAll('.sort-chip').forEach(c=>c.classList.remove('selected'));
+  if(!el.classList.contains('placed-correct')&&!el.classList.contains('placed-wrong')){
+    el.classList.add('selected');
+    sortSelected=el;
+  }
+}
+function dropSort(zone,zoneId){
+  if(!sortSelected) return;
+  const correct=sortSelected.dataset.answer===zoneId;
+  sortSelected.classList.remove('selected');
+  if(correct){
+    sortSelected.classList.add('placed-correct');
+    const clone=sortSelected.cloneNode(true);
+    clone.style.cursor='default';
+    clone.onclick=null;
+    zone.appendChild(clone);
+    sortSelected.style.display='none';
+    gScore+=5;updateStats();
+    showNotif('+5 pts! Correct placement ✓');
+  } else {
+    sortSelected.classList.add('placed-wrong');
+    setTimeout(()=>sortSelected.classList.remove('placed-wrong'),600);
+    showNotif('Not quite — try again!');
+  }
+  sortSelected=null;
+}
+function checkSort(){
+  const remaining=document.querySelectorAll('#sort-pool .sort-chip:not([style*="display: none"])');
+  if(remaining.length===0){
+    document.getElementById('sort-result').innerHTML='<span style="color:var(--green);font-weight:700;">✅ All items sorted correctly! Great work!</span>';
+    awardBadge('sort');
+  } else {
+    document.getElementById('sort-result').innerHTML=`<span style="color:var(--orange);">${remaining.length} item(s) still need to be placed.</span>`;
+  }
+}
+
+// ─── INIT ───
+updateStats();
+</script>
+</body>
+</html>
